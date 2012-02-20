@@ -2067,84 +2067,14 @@ int LIBMTP_Read_Event(LIBMTP_mtpdevice_t *device, LIBMTP_event_t *event)
    */
   PTPParams *params = (PTPParams *) device->params;
   PTPContainer ptp_event;
+  memset(&ptp_event, 0, sizeof(PTPContainer)); // zero it so params are zeroed too
   uint16_t ret = ptp_usb_event_wait(params, &ptp_event);
-  uint16_t code;
-  uint32_t session_id;
-  uint32_t transaction_id;
-  uint32_t param1;
-  uint32_t param2;
-  uint32_t param3;
+
+  memcpy(event, &ptp_event, sizeof(LIBMTP_event_t));
 
   if (ret != PTP_RC_OK) {
     /* Device is closing down or other fatal stuff, exit thread */
     return -1;
-  }
-
-  *event = LIBMTP_EVENT_NONE;
-
-  /* Process the event */
-  code = ptp_event.Code;
-  session_id = ptp_event.SessionID;
-  transaction_id = ptp_event.Transaction_ID;
-  param1 = ptp_event.Param1;
-  param2 = ptp_event.Param2;
-  param3 = ptp_event.Param3;
-
-  switch(code) {
-    case PTP_EC_Undefined:
-      LIBMTP_INFO("Received event PTP_EC_Undefined in session %u\n", session_id);
-      break;
-    case PTP_EC_CancelTransaction:
-      LIBMTP_INFO("Received event PTP_EC_CancelTransaction in session %u\n", session_id);
-      break;
-    case PTP_EC_ObjectAdded:
-      LIBMTP_INFO("Received event PTP_EC_ObjectAdded in session %u\n", session_id);
-      break;
-    case PTP_EC_ObjectRemoved:
-      LIBMTP_INFO("Received event PTP_EC_ObjectRemoved in session %u\n", session_id);
-      break;
-    case PTP_EC_StoreAdded:
-      LIBMTP_INFO("Received event PTP_EC_StoreAdded in session %u\n", session_id);
-      /* TODO: rescan storages */
-      break;
-    case PTP_EC_StoreRemoved:
-      LIBMTP_INFO("Received event PTP_EC_StoreRemoved in session %u\n", session_id);
-      /* TODO: rescan storages */
-      break;
-    case PTP_EC_DevicePropChanged:
-      LIBMTP_INFO("Received event PTP_EC_DevicePropChanged in session %u\n", session_id);
-      /* TODO: update device properties */
-      break;
-    case PTP_EC_ObjectInfoChanged:
-      LIBMTP_INFO("Received event PTP_EC_ObjectInfoChanged in session %u\n", session_id);
-      /* TODO: rescan object cache or just for this one object */
-      break;
-    case PTP_EC_DeviceInfoChanged:
-      LIBMTP_INFO("Received event PTP_EC_DeviceInfoChanged in session %u\n", session_id);
-      /* TODO: update device info */
-      break;
-    case PTP_EC_RequestObjectTransfer:
-      LIBMTP_INFO("Received event PTP_EC_RequestObjectTransfer in session %u\n", session_id);
-      break;
-    case PTP_EC_StoreFull:
-      LIBMTP_INFO("Received event PTP_EC_StoreFull in session %u\n", session_id);
-      break;
-    case PTP_EC_DeviceReset:
-      LIBMTP_INFO("Received event PTP_EC_DeviceReset in session %u\n", session_id);
-      break;
-    case PTP_EC_StorageInfoChanged :
-      LIBMTP_INFO( "Received event PTP_EC_StorageInfoChanged in session %u\n", session_id);
-     /* TODO: update storage info */
-      break;
-    case PTP_EC_CaptureComplete :
-      LIBMTP_INFO( "Received event PTP_EC_CaptureComplete in session %u\n", session_id);
-      break;
-    case PTP_EC_UnreportedStatus :
-      LIBMTP_INFO( "Received event PTP_EC_UnreportedStatus in session %u\n", session_id);
-      break;
-    default :
-      LIBMTP_INFO( "Received unknown event in session %u\n", session_id);
-      break;
   }
 
   return 0;
@@ -2642,7 +2572,8 @@ static void flush_handles(LIBMTP_mtpdevice_t *device)
 
   // If the previous failed or returned no objects, use classic
   // methods instead.
-  if (params->nrofobjects == 0) {
+  // Skip if object listing is not supported.
+  if (params->nrofobjects == 0 && !FLAG_NO_OBJECT_LIST(ptp_usb) ) {
     // Get all the handles using just standard commands.
     if (device->storage == NULL) {
       get_handles_recursively(device, params,
@@ -4277,6 +4208,11 @@ LIBMTP_file_t * LIBMTP_Get_Files_And_Folders(LIBMTP_mtpdevice_t *device,
 		 "due to missing low-level support to read "
 		 "information on individual tracks\n",
 		 __func__);
+    return NULL;
+  }
+
+  if (FLAG_NO_OBJECT_LIST(ptp_usb)) {
+    LIBMTP_ERROR("Device does not support listing objects!");
     return NULL;
   }
 

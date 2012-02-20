@@ -764,12 +764,16 @@ struct LIBMTP_devicestorage_struct {
 
 /**
  * LIBMTP Event structure
- * TODO: add all externally visible events here
  */
-enum LIBMTP_event_enum {
-  LIBMTP_EVENT_NONE,
+struct LIBMTP_event {
+	uint16_t Code;
+	uint32_t SessionID;
+	uint32_t Transaction_ID;
+	uint32_t Param1;
+	uint32_t Param2;
+	uint32_t Param3;
 };
-typedef enum LIBMTP_event_enum LIBMTP_event_t;
+typedef struct LIBMTP_event LIBMTP_event_t;
 
 /** @} */
 

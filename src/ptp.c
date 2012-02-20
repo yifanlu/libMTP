@@ -53,8 +53,6 @@
 
 #define CHECK_PTP_RC(result)	{uint16_t r=(result); if (r!=PTP_RC_OK) return r;}
 
-#define PTP_CNT_INIT(cnt) {memset(&cnt,0,sizeof(cnt));}
-
 static uint16_t ptp_exit_recv_memory_handler (PTPDataHandler*,unsigned char**,unsigned long*);
 static uint16_t ptp_init_recv_memory_handler(PTPDataHandler*);
 static uint16_t ptp_init_send_memory_handler(PTPDataHandler*,unsigned char*,unsigned long len);
@@ -99,12 +97,6 @@ ptp_error (PTPParams *params, const char *format, ...)
 #include "ptp-pack.c"
 
 /* major PTP functions */
-
-/* Transaction data phase description */
-#define PTP_DP_NODATA		0x0000	/* no data phase */
-#define PTP_DP_SENDDATA		0x0001	/* sending data */
-#define PTP_DP_GETDATA		0x0002	/* receiving data */
-#define PTP_DP_DATA_MASK	0x00ff	/* data phase mask */
 
 /**
  * ptp_transaction:
@@ -378,7 +370,7 @@ ptp_exit_fd_handler (PTPDataHandler *handler) {
 }
 
 /* Old style transaction, based on memory */
-static uint16_t
+uint16_t
 ptp_transaction (PTPParams* params, PTPContainer* ptp, 
 		uint16_t flags, unsigned int sendlen,
 		unsigned char **data, unsigned int *recvlen

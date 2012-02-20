@@ -168,6 +168,8 @@ int guess_usb_speed(PTP_USB *ptp_usb);
   ((a)->rawdevice.device_entry.device_flags & DEVICE_FLAG_FORCE_RESET_ON_CLOSE)
 #define FLAG_BROKEN_GET_OBJECT_PROPVAL(a) \
   ((a)->rawdevice.device_entry.device_flags & DEVICE_FLAG_BROKEN_GET_OBJECT_PROPVAL)
+#define FLAG_NO_OBJECT_LIST(a) \
+  ((a)->rawdevice.device_entry.device_flags & DEVICE_FLAG_NO_OBJECT_LIST)
 
 /* connect_first_device return codes */
 #define PTP_CD_RC_CONNECTED	0

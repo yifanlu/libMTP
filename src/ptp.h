@@ -63,6 +63,8 @@ struct _PTPContainer {
 };
 typedef struct _PTPContainer PTPContainer;
 
+#define PTP_CNT_INIT(cnt) {memset(&cnt,0,sizeof(cnt));}
+
 /* PTP USB Bulk-Pipe container */
 /* USB bulk max packet length for high speed endpoints */
 /* The max packet is set to 512 bytes. The spec says
@@ -1843,6 +1845,12 @@ typedef struct _PTPCanonEOSDeviceInfo {
 #define PTP_DPC_CASIO_UNKNOWN_17	0xD030
 #define PTP_DPC_CASIO_UNKNOWN_18	0xD080
 
+/* Transaction data phase description */
+#define PTP_DP_NODATA		0x0000	/* no data phase */
+#define PTP_DP_SENDDATA		0x0001	/* sending data */
+#define PTP_DP_GETDATA		0x0002	/* receiving data */
+#define PTP_DP_DATA_MASK	0x00ff	/* data phase mask */
+
 /* MTP specific Object Properties */
 #define PTP_OPC_StorageID				0xDC01
 #define PTP_OPC_ObjectFormat				0xDC02
@@ -2205,6 +2213,7 @@ uint16_t ptp_getdeviceinfo	(PTPParams* params, PTPDeviceInfo* deviceinfo);
 uint16_t ptp_generic_no_data	(PTPParams* params, uint16_t opcode, unsigned int cnt, ...);
 
 uint16_t ptp_opensession	(PTPParams *params, uint32_t session);
+uint16_t ptp_transaction	(PTPParams* params, PTPContainer* ptp, uint16_t flags, unsigned int sendlen, unsigned char **data, unsigned int *recvlen);
 
 /**
  * ptp_closesession:

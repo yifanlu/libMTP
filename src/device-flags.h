@@ -273,7 +273,11 @@
  * if you try to get individual properties of an object.
  */
 #define DEVICE_FLAG_BROKEN_GET_OBJECT_PROPVAL	0x20000000
-
+/**
+ * The PS Vita does not return object lists and will slow 
+ * operations down when attempting to do so.
+ */
+#define DEVICE_FLAG_NO_OBJECT_LIST	0x40000000
 
 /**
  * All these bug flags need to be set on SONY NWZ Walkman

@@ -1267,6 +1267,9 @@
   // Reported by Anonymous SourceForge user
   { "Sony", 0x054c, "DCR-SR75", 0x1294,
       DEVICE_FLAGS_SONY_NWZ_BUGS },
+  // Reported by Yifan Lu
+  { "Sony", 0x054c, "Playstation Vita", 0x04e4, 
+      DEVICE_FLAG_NO_OBJECT_LIST },
 
   /*
    * SonyEricsson
