@@ -2890,6 +2890,10 @@ uint16_t ptp_chdk_exec_lua(PTPParams *params, char *script, uint32_t* ret);
 uint16_t ptp_chdk_get_script_output(PTPParams* params, char **output );
 uint16_t ptp_chdk_get_video_settings(PTPParams* params, ptp_chdk_videosettings* vsettings);
 
+/* Wrappers to export static ptp functions */
+int ptp_unpack_MTPProperties (PTPParams *params, unsigned char* data, MTPProperties **pprops, unsigned int len);
+time_t ptp_unpack_MTPTime(const char* str);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

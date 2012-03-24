@@ -5503,3 +5503,13 @@ ptp_add_object_to_cache(PTPParams *params, uint32_t handle)
 	PTPObject *ob;
 	return ptp_object_want (params, handle, PTPOBJECT_OBJECTINFO_LOADED|PTPOBJECT_MTPPROPLIST_LOADED, &ob);
 }
+
+int
+ptp_unpack_MTPProperties (PTPParams *params, unsigned char* data, MTPProperties **pprops, unsigned int len) {
+	return ptp_unpack_OPL(params, data, pprops, len);
+}
+
+time_t
+ptp_unpack_MTPTime(const char* str) {
+	return ptp_unpack_PTPTIME(str);
+}
