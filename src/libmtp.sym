@@ -106,6 +106,7 @@ ptp_sendobjectinfo
 ptp_sendobject
 ptp_mtp_getobjectpropdesc
 ptp_mtp_getobjectpropssupported
+ptp_mtp_getobjectpropvalue
 ptp_mtp_setobjectproplist
 ptp_unpack_MTPProperties
 ptp_unpack_MTPTime
