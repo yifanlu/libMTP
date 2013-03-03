@@ -102,6 +102,7 @@ LIBMTP_Set_Object_Filename
 LIBMTP_Read_Event
 ptp_transaction
 ptp_getobject
+ptp_getobjecthandles
 ptp_sendobjectinfo
 ptp_sendobject
 ptp_mtp_getobjectpropdesc
