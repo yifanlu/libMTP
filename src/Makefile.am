@@ -17,7 +17,7 @@ if LIBOPENUSB_COMPILE
 libmtp_la_SOURCES += libopenusb1-glue.c
 endif
 
-include_HEADERS=libmtp.h
+include_HEADERS=libmtp.h ptp.h gphoto2-endian.h device-flags.h
 EXTRA_DIST=libmtp.h.in libmtp.sym ptp-pack.c
 
 # ---------------------------------------------------------------------------
