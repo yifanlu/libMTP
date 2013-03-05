@@ -35,6 +35,7 @@
 #include "device-flags.h"
 #include "util.h"
 #include "ptp.h"
+#include "gphoto2-endian.h"
 
 #include <errno.h>
 #include <stdio.h>
